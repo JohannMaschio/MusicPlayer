@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         });
     }
 
-    // Set up from layout 
+    // Set up from layout
     public void setUpUI(){
 
         mediaPlayer = new MediaPlayer();
@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         }
     }
 
+    // Start music metod and set pause button
     public void startMusic(){
         if (mediaPlayer != null){
             mediaPlayer.start();
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
     }
 
+    // pause metod and set play button
     public void pauseMusic(){
         if (mediaPlayer != null){
             mediaPlayer.pause();
