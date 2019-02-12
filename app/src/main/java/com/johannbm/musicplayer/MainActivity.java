@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         });
     }
 
+    // Set up from layout 
     public void setUpUI(){
 
         mediaPlayer = new MediaPlayer();
