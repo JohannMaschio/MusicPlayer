@@ -33,21 +33,26 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // call method to set up
         setUpUI();
 
+        // set the max for seekbar and Listener
         seekBarID.setMax(mediaPlayer.getDuration());
         seekBarID.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
+                // check if the changed come from user and go to the progress passed
                 if (fromUser){
                     mediaPlayer.seekTo(progress);
                 }
 
+                // format the time to be displayed
                 SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
                 int currentPos = mediaPlayer.getCurrentPosition();
                 int duration = mediaPlayer.getDuration();
 
+                // set time for the fields
                 leftTime.setText(dateFormat.format(new Date(currentPos)));
                 rightTime.setText(dateFormat.format( new Date(duration - currentPos)));
             }
@@ -64,12 +69,14 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         });
     }
 
-    // Set up from layout
+    // Set up for layout
     public void setUpUI(){
 
+        // init de media player and pass the music
         mediaPlayer = new MediaPlayer();
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.kalimba);
 
+        //set up
         artistImage = findViewById(R.id.imageViewOval);
         line = findViewById(R.id.imageViewLine);
         songName = findViewById(R.id.textViewSongNameID);
@@ -81,20 +88,25 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         playButton = findViewById(R.id.playButton);
         nextButton = findViewById(R.id.nextButton);
 
+        // Set up listener for the buttons
         prevButton.setOnClickListener(this);
         playButton.setOnClickListener(this);
         nextButton.setOnClickListener(this);
     }
 
+    // onClick and switch
     @Override
     public void onClick(View v) {
 
         switch (v.getId()){
+            //case previous button clicked
             case R.id.prevButton:
                 backMusic();
                 break;
 
+            //case play button clicked
             case R.id.playButton:
+                //check if media is playing
                 if (mediaPlayer.isPlaying()){
                     pauseMusic();
                 } else {
@@ -102,13 +114,14 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
                 }
                 break;
 
+            //case next button clicked
             case R.id.nextButton:
                 nextMusic();
                 break;
         }
     }
 
-    // Start music metod and set pause button
+    // Start music method and set pause button
     public void startMusic(){
         if (mediaPlayer != null){
             mediaPlayer.start();
@@ -118,7 +131,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
     }
 
-    // pause metod and set play button
+    // pause method and set play button
     public void pauseMusic(){
         if (mediaPlayer != null){
             mediaPlayer.pause();
@@ -127,6 +140,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         }
     }
 
+    //back method *for now the method just back to the beginning of the song*
     public void backMusic(){
         if (mediaPlayer.isPlaying()){
             mediaPlayer.seekTo(0);
@@ -135,6 +149,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         }
     }
 
+    // next music method *for now the method just go to the end of the song*
     public void nextMusic(){
         if (mediaPlayer.isPlaying()){
             mediaPlayer.seekTo(mediaPlayer.getDuration() - 1000);
@@ -143,12 +158,14 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         }
     }
 
+    //thread for move seekbar and update the time left and right
     public void updateThread(){
-
         thread = new Thread(){
             @Override
             public void run() {
+                //while mediaplayer is not null and is playing the thread will update
                 while (mediaPlayer != null && mediaPlayer.isPlaying()){
+                    //thy catch for erros
                     try {
                         Thread.sleep(50);
                         runOnUiThread(new Runnable() {
@@ -169,8 +186,11 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
                 }
             }
         };
+        // Start the thread
         thread.start();
     }
+
+    //clearing the memory
     @Override
     protected void onDestroy() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()){
